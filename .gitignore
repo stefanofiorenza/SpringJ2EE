@@ -1,0 +1,7 @@
+Demo/.metadata/
+Temp/
+Demo/*/.settings/
+Demo/*/bin/
+*.classpath
+*.project
+Demo/*/build/
