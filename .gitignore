@@ -1,7 +1,7 @@
-Demo/.metadata/
-Temp/
-Demo/*/.settings/
-Demo/*/bin/
 *.classpath
 *.project
-Demo/*/build/
+.metadata/
+
+Demo/Old/*
+Temp/*
+.settings/

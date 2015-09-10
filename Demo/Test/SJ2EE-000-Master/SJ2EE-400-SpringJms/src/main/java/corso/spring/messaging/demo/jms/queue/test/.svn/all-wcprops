@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/svn/!svn/ver/133/branches/Spring-Messaging/prove/100-Spring-Jms/src/corso/spring/messaging/demo/jms/queue/test
+END
+TestJmsQueueProducer.java
+K 25
+svn:wc:ra_dav:version-url
+V 137
+/svn/!svn/ver/135/branches/Spring-Messaging/prove/100-Spring-Jms/src/corso/spring/messaging/demo/jms/queue/test/TestJmsQueueProducer.java
+END
+TestJmsQueueConsumer.java
+K 25
+svn:wc:ra_dav:version-url
+V 137
+/svn/!svn/ver/135/branches/Spring-Messaging/prove/100-Spring-Jms/src/corso/spring/messaging/demo/jms/queue/test/TestJmsQueueConsumer.java
+END
