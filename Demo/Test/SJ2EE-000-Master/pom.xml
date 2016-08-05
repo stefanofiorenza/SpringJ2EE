@@ -11,6 +11,7 @@
   	<module>SJ2EE-100-EJB-Client</module>
   	<module>SJ2EE-300-SpringEjbClients</module>
   	<module>SJ2EE-400-SpringJms</module>
+  	<module>SJ2EE-410-SpringJms</module>
    </modules>
   
   	<properties>

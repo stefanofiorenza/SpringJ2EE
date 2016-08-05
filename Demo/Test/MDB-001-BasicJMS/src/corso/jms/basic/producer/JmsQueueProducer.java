@@ -6,7 +6,6 @@ import java.util.Random;
 
 
 
-
 import javax.jms.JMSException;
 import javax.jms.ObjectMessage;
 import javax.jms.Queue;
@@ -20,14 +19,13 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
-import corso.jms.basic.consumer.common.JBossJndiUtils;
-import corso.jms.basic.consumer.polling.JmsQueueConsumer;
+import corso.jms.basic.consumer.JmsQueueConsumer;
 
 public class JmsQueueProducer {
 
-//	private static final String DESTINATION = "queue/testQueue";
-//	static final String CONNECTION_FACTORY_JBOSS423="QueueConnectionFactory";
-//	static final String CONNECTION_FACTORY_JBOSS51="ConnectionFactory";
+	private static final String DESTINATION = "queue/testQueue";
+	static final String CONNECTION_FACTORY_JBOSS423="QueueConnectionFactory";
+	static final String CONNECTION_FACTORY_JBOSS51="ConnectionFactory";
 	
 	
 	
@@ -38,44 +36,33 @@ public class JmsQueueProducer {
 	private QueueSender sender;
 	
 	
-	public static void main(String[] args) {
-		 
-//		testSendOneMessage("Primo messaggio");
-		//testSendOneMessage("Secondo messaggio");
-		//testSendOneMessage("Terzo messaggio");
-		testSendMessages(10);
-//		testSendOneMessage(JmsQueueConsumer.EXIT_MESSAGE);
-		
-		
+	private static Context getInitialContext(){
+		Properties properties = new Properties();
+		properties.put(Context.INITIAL_CONTEXT_FACTORY,"org.jnp.interfaces.NamingContextFactory");
+		properties.put(Context.PROVIDER_URL, "jnp://localhost:1099");
+		InitialContext jndiContext = null;
+		try{
+			// Get an initial context
+		   jndiContext = new InitialContext(properties);       		      
+		}catch(NamingException e){
+			System.out.println("Context Error: "+e.getMessage());
+		}
+		return jndiContext;
 	}
-	
-//	private static Context getInitialContext(){
-//		Properties properties = new Properties();
-//		properties.put(Context.INITIAL_CONTEXT_FACTORY,"org.jnp.interfaces.NamingContextFactory");
-//		properties.put(Context.PROVIDER_URL, "jnp://localhost:1099");
-//		InitialContext jndiContext = null;
-//		try{
-//			// Get an initial context
-//		   jndiContext = new InitialContext(properties);       		      
-//		}catch(NamingException e){
-//			System.out.println("Context Error: "+e.getMessage());
-//		}
-//		return jndiContext;
-//	}
 	
 	public JmsQueueProducer(){
 		try{
 			//Riferimento al servizio JNDI
-			Context context = JBossJndiUtils.getInitialContext(); 
+			Context context = getInitialContext(); 
 			
 			//Ottengo un factory per la costruzione di una queue connection
-			qcf = (QueueConnectionFactory) context.lookup(JBossJndiUtils.CONNECTION_FACTORY_JBOSS71);	
+			qcf = (QueueConnectionFactory) context.lookup(CONNECTION_FACTORY_JBOSS51);	
 			
 			//Ottengo un riferimento alla destination
-			 queueReference = (Queue)context.lookup(JBossJndiUtils.QUEUE_JBOSS71);
+			 queueReference = (Queue)context.lookup(JmsQueueProducer.DESTINATION);
 			 
 			//Ottengo una connessione ad una destination di tipo queue
-			queueConnection = qcf.createQueueConnection("testuser","testuserpw");
+			queueConnection = qcf.createQueueConnection();
 			
 			
 			//Creo una sessione non-transazionale di comunicazione con la coda:
@@ -141,7 +128,15 @@ public class JmsQueueProducer {
 		}
 	}
 	
-	
+	public static void main(String[] args) {
+		
+		testSendOneMessage("Primo messaggio");
+		//testSendOneMessage("Secondo messaggio");
+		//testSendOneMessage("Terzo messaggio");
+		//testSendOneMessage(JmsQueueConsumer.EXIT_MESSAGE);
+		//testSendMessages(10);
+		
+	}
 	
 	public static void testSendMessages (int quanti){
 		
