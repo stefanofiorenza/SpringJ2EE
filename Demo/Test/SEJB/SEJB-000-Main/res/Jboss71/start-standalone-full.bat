@@ -1,0 +1,1 @@
+standalone –c standalone-full.xml
