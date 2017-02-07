@@ -1,4 +1,4 @@
-package corso.jms.basic.config;
+package corso.jms.basic;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,6 +10,7 @@ import javax.jms.JMSException;
 
 import corso.jms.basic.common.JmsConsumer;
 import corso.jms.basic.common.JmsProducer;
+import corso.jms.basic.config.JndiUtils;
 
 public class TestConfigs {
 
@@ -18,11 +19,9 @@ public class TestConfigs {
 	
 	
 	public static void main(String[] args) throws IOException {
-		
-		Properties consumerProps= bundleToProps("/consumer.properties");		
-		Properties producerProps= bundleToProps("/producer.properties");		
-		JmsConsumer consumer=JndiUtils.loadJmsConsumer(consumerProps);
-		JmsProducer producer=JndiUtils.loadJmsProducer(producerProps);
+				
+		JmsConsumer consumer=JndiUtils.loadJmsConsumer();
+		JmsProducer producer=JndiUtils.loadJmsProducer();
 		consumerThread(consumer);
 		producerThread(producer);
 	}
@@ -49,12 +48,7 @@ public class TestConfigs {
 		});				
 	}
 	
-	private static Properties bundleToProps(String bundleName) throws IOException{
-		InputStream cfgStream = TestConfigs.class.getResourceAsStream(bundleName);
-		Properties props= new Properties();
-		props.load(cfgStream);
-		return props;
-	}
+
 	
 	private static void producerActions(JmsProducer producer) {		
 		producer.startConnection();

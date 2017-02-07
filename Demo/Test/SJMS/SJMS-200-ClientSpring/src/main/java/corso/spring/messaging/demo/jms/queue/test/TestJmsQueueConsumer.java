@@ -11,12 +11,11 @@ public class TestJmsQueueConsumer {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		ApplicationContext context =new ClassPathXmlApplicationContext("context-config-jboss71.xml");
+		ApplicationContext context =new ClassPathXmlApplicationContext("context-config-activemq.xml");
 		SpringQueueConsumer consumer = (SpringQueueConsumer) context.getBean("queueConsumer");
 		
 		//for (int i=0; i<30; i++){
-			consumer.receiveTextMessage();
+			consumer.pollingOneTextMessage();
 		//}
 	}
 

@@ -1,24 +1,29 @@
 package corso.jms.basic.config;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
 import javax.jms.Destination;
 import javax.jms.Queue;
 import javax.jms.QueueConnectionFactory;
-import javax.jms.Topic;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
+import corso.jms.basic.TestConfigs;
 import corso.jms.basic.common.JmsConsumer;
 import corso.jms.basic.common.JmsProducer;
+
 
 public class JndiUtils {
 
 	
-	public static JmsConsumer loadJmsConsumer(Properties config){
+	public static JmsConsumer loadJmsConsumer(){
 								
 			try {
+				
+				Properties config=bundleToProps(Configs.CONS_BUNDLE_NAME);
 				
 				//Riferimento al servizio JNDI
 				Context context = getInitialContext(config); 	
@@ -46,15 +51,17 @@ public class JndiUtils {
 						config.getProperty(Configs.USERNAME), config.getProperty(Configs.PASSWORD), 
 						transactional, ackMode);	
 				
-			} catch (NamingException e) {					
+			} catch (NamingException | IOException e) {					
 				e.printStackTrace();
-			}	
+			} 
 			
 			return null;				
 	}
 	
-	public static JmsProducer loadJmsProducer(Properties config){
+	public static JmsProducer loadJmsProducer(){
 		try {
+			
+			Properties config=bundleToProps(Configs.PROD_BUNDLE_NAME);
 			
 			//Riferimento al servizio JNDI
 			Context context = getInitialContext(config); 	
@@ -82,13 +89,20 @@ public class JndiUtils {
 					config.getProperty(Configs.USERNAME), config.getProperty(Configs.PASSWORD), 
 					transactional, ackMode);	
 			
-		} catch (NamingException e) {					
+		} catch (NamingException | IOException e) {					
 			e.printStackTrace();
 		}	
 		
 		return null;	
 	}
 		
+	private static Properties bundleToProps(String bundleName) throws IOException{
+		InputStream cfgStream = JndiUtils.class.getResourceAsStream(bundleName);
+		Properties props= new Properties();
+		props.load(cfgStream);
+		return props;
+	}
+	
 	private static Context getInitialContext(Properties properties){
 //		Properties properties = new Properties();
 //		properties.put(Context.INITIAL_CONTEXT_FACTORY,"org.jnp.interfaces.NamingContextFactory");

@@ -1,23 +1,7 @@
 package corso.jms.basic.consumer.transazione;
 
-import java.util.Properties;
-
-import javax.jms.JMSException;
-import javax.jms.Message;
-import javax.jms.Session;
-import javax.jms.TextMessage;
-import javax.jms.Topic;
-import javax.jms.TopicConnection;
-import javax.jms.TopicConnectionFactory;
-import javax.jms.TopicSession;
-import javax.jms.TopicSubscriber;
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-
 import corso.jms.basic.common.JmsConsumer;
-import corso.jms.basic.config.ActiveMqUtils;
-import corso.jms.basic.config.JBossUtils;
+import corso.jms.basic.config.JndiUtils;
 
 
 public class JmsTopicConsumerTransaction {
@@ -26,8 +10,8 @@ public class JmsTopicConsumerTransaction {
 	
 	public static void main(String[] args) {
 		try{
-			//JmsGenericConsumer queueConsumer = JBossUtils.createTopicConsumerJboss71();	
-			JmsConsumer topicConsumer =ActiveMqUtils.createTopicConsumerActiveMq();
+		
+			JmsConsumer topicConsumer =JndiUtils.loadJmsConsumer();			
 			topicConsumer.startConnection();
 			
 			topicConsumer.pollingForOneTextMessage();

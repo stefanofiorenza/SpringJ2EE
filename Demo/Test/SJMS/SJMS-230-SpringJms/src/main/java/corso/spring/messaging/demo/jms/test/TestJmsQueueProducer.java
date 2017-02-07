@@ -5,12 +5,11 @@ import java.util.Random;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import corso.spring.jms.demo.consumers.SpringQueueConsumer01Polling;
 import corso.spring.jms.demo.producers.SpringQueueProducer;
 
 public class TestJmsQueueProducer {
 
-	private static final int DELAY=100;
+	private static Random rnd = new Random();
 	/**
 	 * @param args
 	 */
@@ -20,52 +19,44 @@ public class TestJmsQueueProducer {
 		SpringQueueProducer producer = (SpringQueueProducer) context.getBean("queueProducer");
 		
 		//testSendOneMessage(producer, "messaggio prova Spring JMS");
-		testSendMessages(producer,200);
+		//testSendMessages(producer,40);
+		//producer.sendTextMessage("messaggio prova Spring JMS");
 		
+		testSendMessages(producer,100,10);
 	}
 	
 	
-public static void testSendMessages (SpringQueueProducer producer,int quanti){
-		
-		//SpringQueueProducer ms = new SpringQueueProducer();
-		
-		Random rnd = new Random();
-				
+	public static void testSendMessages (SpringQueueProducer producer,int quanti, int howOftenIllegalMsg){
+					
 		for (int i=0;i<quanti;i++){
 			
-			int secondi =rnd.nextInt(DELAY);
+			slowCurrentThreadForRndMillis(10);
 			
-			try {
-				Thread.sleep(secondi);
-				
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			boolean sent = producer.sendTextMessage("messaggio "+i);
+			if(howOftenIllegalMsg>0 && i%howOftenIllegalMsg==0){
+				producer.sendTextMessage("");
+			}else{
+				producer.sendTextMessage("messaggio "+i);
+			}			
+		}		
+	}
+	
+//public static void testSendOneMessage (SpringQueueProducer producer,String messaggio){	
+//	producer.sendTextMessage(messaggio);				
+//}
+
+	private static void slowCurrentThreadForRndMillis(int maxSleepTime){
+		
+		int millis =rnd.nextInt(maxSleepTime);
+		
+		try {
+			Thread.sleep(millis);
 			
-			if(sent)
-				System.out.println("spedito messaggio:messaggio "+i);
-			else
-				System.out.println("Comunication problem...");	
+		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
+			e.printStackTrace();
 		}
-		
-		
-		
-		
 	}
-	
-	public static void testSendOneMessage (SpringQueueProducer producer,String messaggio){
-		
-	
-		boolean sent = producer.sendTextMessage(messaggio);
-		
-		
-		if(sent)
-			System.out.println("Text Message sent...");
-		else
-			System.out.println("Comunication problem...");		
-		
-	}
+
+
 
 }

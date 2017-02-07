@@ -32,33 +32,6 @@ public class JmsClient {
 		}		
 	}
 	
-	public JmsClient(ConnectionFactory connectionFactory, String destinationName,  String user, String pw, 
-			boolean sessionTransactional, int ackMode,DestinationType destType){
-		try{
-			
-			//Apro una connessione Jms ottenendola dal Pool (Factory)
-			this.connection = connectionFactory.createConnection(user,pw);
-			
-			//Creo una sessione JMS (transactional, ackMode)			
-			this.session = connection.createSession(sessionTransactional, ackMode);	
-			
-			//inizializza destination
-			switch(destType){
-				case QUEUE:
-				destination=session.createQueue(destinationName);
-				break;
-				case TOPIC:
-				destination=session.createTopic(destinationName);
-				break;
-			}
-		}		
-		catch (JMSException e) {
-			e.printStackTrace();
-		}		
-	}
-	
-	
-
 	
 	public void startConnection(){
 		try{
@@ -88,4 +61,29 @@ public class JmsClient {
 			}
 		}
 	}
+	
+//	public JmsClient(ConnectionFactory connectionFactory, String destinationName,  String user, String pw, 
+//	boolean sessionTransactional, int ackMode,DestinationType destType){
+//try{
+//	
+//	//Apro una connessione Jms ottenendola dal Pool (Factory)
+//	this.connection = connectionFactory.createConnection(user,pw);
+//	
+//	//Creo una sessione JMS (transactional, ackMode)			
+//	this.session = connection.createSession(sessionTransactional, ackMode);	
+//	
+//	//si collega a destination per id (gia esistente sul Broker)
+//	switch(destType){
+//		case QUEUE:
+//		destination=session.createQueue(destinationName);
+//		break;
+//		case TOPIC:
+//		destination=session.createTopic(destinationName);
+//		break;
+//	}
+//}		
+//catch (JMSException e) {
+//	e.printStackTrace();
+//}		
+//}
 }

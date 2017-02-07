@@ -6,6 +6,8 @@ import java.util.Random;
 
 
 
+
+
 import javax.jms.Destination;
 import javax.jms.JMSException;
 import javax.jms.Message;
@@ -21,36 +23,31 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.jms.JmsException;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.core.MessageCreator;
 
+@Slf4j
 public class SpringQueueProducer {
 
-	
+	@Getter
+	@Setter
 	private JmsTemplate jmsTemplate;
+	@Getter
+	@Setter
 	private Destination destination;
 	
-	
-	public JmsTemplate getJmsTemplate() {
-		return jmsTemplate;
-	}
-	public void setJmsTemplate(JmsTemplate jmsTemplate) {
-		this.jmsTemplate = jmsTemplate;
-	}
-	public Destination getDestination() {
-		return destination;
-	}
-	public void setDestination(Destination destination) {
-		this.destination = destination;
-	}
-	public boolean sendObjectMessage(final Serializable obj) {
+	public boolean sendObjectMessage(Serializable obj) {
 					
 			//Creo un messaggio 
-			this.jmsTemplate.send(this.destination, new MessageCreator() {
+			//TODO Spring 3.0 cambia il template
+				this.jmsTemplate.send(this.destination, new MessageCreator() {
 					public Message createMessage(Session session) throws JMSException {
-						ObjectMessage message = session.createObjectMessage();
-						message.setObject(obj);
+						Message message = session.createMessage();
 						//message.setString("mailId", mail.getMailId());
 						return message;
 					}
@@ -59,7 +56,7 @@ public class SpringQueueProducer {
 		return true;
 		
 	}
-	public boolean sendTextMessage(final String text){
+	public void sendTextMessage(final String text){
 		//Creo un messaggio 
 		jmsTemplate.send(new MessageCreator() {
 			public Message createMessage(Session session) throws JMSException {
@@ -68,9 +65,60 @@ public class SpringQueueProducer {
 				return message;
 			}
 		});
-		return true;
+		log.info("Message:[{}] sent",text);
 	}
 	
 
+	/*
+	public static void main(String[] args) {
+		
+		testSendOneMessage("Primo messaggio");
+		//testSendMessages(40);
+		
+	}
 	
+	public static void testSendMessages (int quanti){
+		
+		SpringQueueProducer ms = new SpringQueueProducer();
+		
+		Random rnd = new Random();
+				
+		for (int i=0;i<quanti;i++){
+			
+			int secondi =rnd.nextInt(3000);
+			
+			try {
+				Thread.sleep(secondi);
+				
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			boolean sent = ms.sendTextMessage("messaggio "+i);
+			
+			if(sent)
+				System.out.println("Text Message sent...");
+			else
+				System.out.println("Comunication problem...");	
+		}
+		
+		
+		
+		
+	}
+	
+	public static void testSendOneMessage (String messaggio){
+		
+		SpringQueueProducer ms = new SpringQueueProducer();
+		boolean sent = ms.sendTextMessage(messaggio);
+		
+		
+		if(sent)
+			System.out.println("Text Message sent...");
+		else
+			System.out.println("Comunication problem...");		
+		ms.closeCommunication();
+	}
+	
+	*/
 }

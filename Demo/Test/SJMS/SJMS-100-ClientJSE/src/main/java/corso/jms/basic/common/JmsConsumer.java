@@ -1,30 +1,15 @@
 package corso.jms.basic.common;
 
 
-import java.util.Properties;
-
-import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
 import javax.jms.Destination;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageConsumer;
-import javax.jms.ObjectMessage;
-import javax.jms.Queue;
-import javax.jms.QueueConnection;
-import javax.jms.QueueConnectionFactory;
-import javax.jms.QueueReceiver;
-import javax.jms.QueueSession;
-import javax.jms.Session;
 import javax.jms.TextMessage;
-import javax.jms.Topic;
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 
 import lombok.extern.slf4j.Slf4j;
 import corso.jms.basic.config.DestinationType;
-import corso.jms.basic.config.JBossUtils;
 import corso.jms.basic.consumer.listener.TextMessageListener;
 
 
@@ -41,12 +26,12 @@ public class JmsConsumer extends JmsClient{
 		createConsumerInternal();
 	}
 	
-	public JmsConsumer(ConnectionFactory connectionFactory, String destinationName, String user, String pw, 
-			 boolean sessionTransactional, int ackMode, DestinationType destType){
-		
-			super(connectionFactory, destinationName,user, pw, sessionTransactional,  ackMode,destType);
-			createConsumerInternal();
-	}
+//	public JmsConsumer(ConnectionFactory connectionFactory, String destinationName, String user, String pw, 
+//			 boolean sessionTransactional, int ackMode, DestinationType destType){
+//		
+//			super(connectionFactory, destinationName,user, pw, sessionTransactional,  ackMode,destType);
+//			createConsumerInternal();
+//	}
 	
 	
 	private void createConsumerInternal(){
@@ -73,9 +58,10 @@ public class JmsConsumer extends JmsClient{
 		pollingForAllMessages(exitMessage,0);
 	}
 	
+	
 	public void pollingForAllMessages(String exitMessage, int commitInterval) throws JMSException{
 
-		log.info("Star polling for messages..");			
+		log.info("Start polling for messages..");			
 		String msgContent="";
 		
 		int consumed=0;

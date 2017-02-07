@@ -3,7 +3,9 @@ package corso.spring.jms.demo.consumers;
 
 import javax.jms.*;
 
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class TextMessageListener implements MessageListener {
     
 	private String nome;
@@ -20,18 +22,15 @@ public class TextMessageListener implements MessageListener {
     public void onMessage(Message message) {
         try {
             TextMessage msg = (TextMessage) message;
-       	  	System.out.println("[LISTENER]["+this.getNome()+"]["+Thread.currentThread().getName()+"]: Ricevuto Messaggio:" + msg.getText() );
-          
-            if(msg.getText().contains("4")){
-            	System.out.println("[LISTENER]["+this.getNome()+"]:ricevuto "+msg.getText()+" Eccezione!!!");
-            	System.out.println("[LISTENER]["+this.getNome()+"]: Non processato per valore: "+4+" Verranno eseguiti altri tentativi prima della DLQS");
-            	throw new RuntimeException("Valore=4 Exception");
-            	
-            }else{
-            	  System.out.println("[LISTENER]["+this.getNome()+"]: Processato Con Successo Messaggio:" + msg.getText() );
-            }
+       	  	log.info("[LISTENER]["+this.getNome()+"]["+Thread.currentThread().getName()+"]: Ricevuto Messaggio:" + msg.getText() );
+          	JmsConsumerHelper.processMessage(message);
+          	log.info("[LISTENER]["+this.getNome()+"]: Processato Con Successo Messaggio:" + msg.getText() );
+
         } catch (JMSException ex) {
             ex.printStackTrace();
+        }catch (RuntimeException ex) {
+        	log.error(ex.getMessage(),ex); //log ex per renderla visibile
+        	throw ex;
         }
     }
 }

@@ -3,20 +3,23 @@ package corso.jms.basic.config;
 
 public class Configs {
 
-	public static  final String JBOSS_71_QUEUE_USER="";
-	public static  final String JBOSS_71_QUEUE_PW="";
-	public static  final String JBOSS_71_TOPIC_USER="";
-	public static  final String JBOSS_71_TOPIC_PW="";
-	
-	
-	public static final String ACTIVEMQ_HOST="localhost";
-	public static final int ACTIVEMQ_PORT=61616;
-	public static final String ACTIVEMQ_USER="admin";
-	public static final String ACTIVEMQ_PW="admin";
-	public static final String ACTIVEMQ_LOCATION_URI = "tcp://" + ACTIVEMQ_HOST + ":" + ACTIVEMQ_PORT;
-	public static final String ACTIVEMQ_QUEUE_NAME = "TestQueue";
-	public static final String ACTIVEMQ_TOPIC_NAME = "TestTopic";
+//	public static  final String JBOSS_71_QUEUE_USER="";
+//	public static  final String JBOSS_71_QUEUE_PW="";
+//	public static  final String JBOSS_71_TOPIC_USER="";
+//	public static  final String JBOSS_71_TOPIC_PW="";
+//	
+//	
+//	public static final String ACTIVEMQ_HOST="localhost";
+//	public static final int ACTIVEMQ_PORT=61616;
+//	public static final String ACTIVEMQ_USER="admin";
+//	public static final String ACTIVEMQ_PW="admin";
+//	public static final String ACTIVEMQ_LOCATION_URI = "tcp://" + ACTIVEMQ_HOST + ":" + ACTIVEMQ_PORT;
+//	public static final String ACTIVEMQ_QUEUE_NAME = "TestQueue";
+//	public static final String ACTIVEMQ_TOPIC_NAME = "TestTopic";
 
+	
+	public static final String PROD_BUNDLE_NAME="/producer.properties";
+	public static final String CONS_BUNDLE_NAME="/consumer.properties";
 	
 	public static final boolean SESSION_TRANSACTIONAL=true;
 	public static final boolean SESSION_NON_TRANSACTIONAL=false;

@@ -2,14 +2,13 @@ package corso.jms.basic.consumer.polling;
 
 
 import corso.jms.basic.common.JmsConsumer;
-import corso.jms.basic.config.ActiveMqUtils;
+import corso.jms.basic.config.JndiUtils;
 
 public class JmsQueueConsumer {
 
 	public static void main(String[] args) {
 		try{
-			//JmsGenericConsumer queueConsumer = JBossUtils.createQueueConsumerJboss71();			
-			JmsConsumer queueConsumer =ActiveMqUtils.createQueueConsumerActiveMq();
+			JmsConsumer queueConsumer =JndiUtils.loadJmsConsumer();
 			queueConsumer.startConnection();
 			
 			queueConsumer.pollingForOneTextMessage();

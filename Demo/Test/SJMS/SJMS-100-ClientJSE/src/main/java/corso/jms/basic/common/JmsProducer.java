@@ -2,33 +2,18 @@ package corso.jms.basic.common;
 
 
 import java.io.UnsupportedEncodingException;
-import java.util.Properties;
 
 import javax.jms.BytesMessage;
-import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
 import javax.jms.Destination;
 import javax.jms.JMSException;
 import javax.jms.Message;
-import javax.jms.MessageConsumer;
 import javax.jms.MessageProducer;
 import javax.jms.ObjectMessage;
-import javax.jms.Queue;
-import javax.jms.QueueConnection;
-import javax.jms.QueueConnectionFactory;
-import javax.jms.QueueReceiver;
-import javax.jms.QueueSession;
-import javax.jms.Session;
 import javax.jms.TextMessage;
-import javax.jms.Topic;
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 
 import lombok.extern.slf4j.Slf4j;
 import corso.jms.basic.config.DestinationType;
-import corso.jms.basic.config.JBossUtils;
-import corso.jms.basic.consumer.listener.TextMessageListener;
 
 
 @Slf4j
@@ -43,11 +28,11 @@ public class JmsProducer extends JmsClient{
 		createProducerInternal();			
 	}
 	
-	public JmsProducer(ConnectionFactory connectionFactory, String destinationName, String user, String pw, 
-			 boolean sessionTransactional, int ackMode, DestinationType destType){			
-		super(connectionFactory, destinationName,user, pw, sessionTransactional,  ackMode,destType);
-		createProducerInternal();	
-	}
+//	public JmsProducer(ConnectionFactory connectionFactory, String destinationName, String user, String pw, 
+//			 boolean sessionTransactional, int ackMode, DestinationType destType){			
+//		super(connectionFactory, destinationName,user, pw, sessionTransactional,  ackMode,destType);
+//		createProducerInternal();	
+//	}
 	
 	private void createProducerInternal(){
 		try{			
@@ -62,7 +47,7 @@ public class JmsProducer extends JmsClient{
 	public void sendManyTextMessage(int howMany, int howOftenIllegalMsg){
 		
 		for (int i=0; i<howMany; i++){
-			if(howOftenIllegalMsg!=0 && i%howOftenIllegalMsg==0){
+			if(howOftenIllegalMsg>0 && i%howOftenIllegalMsg==0){
 				sendTextMessage("");
 			}else{
 				sendTextMessage("Message#"+i);

@@ -6,6 +6,8 @@ import java.util.Random;
 
 
 
+
+
 import javax.jms.Destination;
 import javax.jms.JMSException;
 import javax.jms.Message;
@@ -21,29 +23,24 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.jms.JmsException;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.core.MessageCreator;
 
+@Slf4j
 public class SpringQueueProducer {
 
-	
+	@Getter
+	@Setter
 	private JmsTemplate jmsTemplate;
+	@Getter
+	@Setter
 	private Destination destination;
 	
-	
-	public JmsTemplate getJmsTemplate() {
-		return jmsTemplate;
-	}
-	public void setJmsTemplate(JmsTemplate jmsTemplate) {
-		this.jmsTemplate = jmsTemplate;
-	}
-	public Destination getDestination() {
-		return destination;
-	}
-	public void setDestination(Destination destination) {
-		this.destination = destination;
-	}
 	public boolean sendObjectMessage(Serializable obj) {
 					
 			//Creo un messaggio 
@@ -59,7 +56,7 @@ public class SpringQueueProducer {
 		return true;
 		
 	}
-	public boolean sendTextMessage(final String text){
+	public void sendTextMessage(final String text){
 		//Creo un messaggio 
 		jmsTemplate.send(new MessageCreator() {
 			public Message createMessage(Session session) throws JMSException {
@@ -68,7 +65,7 @@ public class SpringQueueProducer {
 				return message;
 			}
 		});
-		return true;
+		log.info("Message:[{}] sent",text);
 	}
 	
 

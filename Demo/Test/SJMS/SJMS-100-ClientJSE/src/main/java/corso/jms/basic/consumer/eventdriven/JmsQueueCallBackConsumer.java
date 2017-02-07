@@ -1,21 +1,9 @@
 package corso.jms.basic.consumer.eventdriven;
 
 
-import javax.jms.JMSException;
-import javax.jms.Queue;
-import javax.jms.QueueConnectionFactory;
-import javax.jms.Session;
-import javax.naming.Context;
-import javax.naming.NamingException;
-
-import org.apache.qpid.jms.JmsConnectionFactory;
-
 import lombok.extern.slf4j.Slf4j;
 import corso.jms.basic.common.JmsConsumer;
-import corso.jms.basic.config.ActiveMqUtils;
-import corso.jms.basic.config.Configs;
-import corso.jms.basic.config.DestinationType;
-import corso.jms.basic.config.JBossUtils;
+import corso.jms.basic.config.JndiUtils;
 import corso.jms.basic.consumer.listener.TextMessageListener;
 
 @Slf4j
@@ -28,7 +16,7 @@ public class JmsQueueCallBackConsumer {
 		// rimane collegato per 10 secondi
 		try {
 			//JmsGenericConsumer queueConsumer = JBossUtils.createQueueConsumerJboss71();			
-			JmsConsumer queueConsumer =ActiveMqUtils.createQueueConsumerActiveMq();
+			JmsConsumer queueConsumer =JndiUtils.loadJmsConsumer();
 			
 			queueConsumer.setTextMessageListener(new TextMessageListener("QueueConsumerListener"));
 			queueConsumer.startConnection();
