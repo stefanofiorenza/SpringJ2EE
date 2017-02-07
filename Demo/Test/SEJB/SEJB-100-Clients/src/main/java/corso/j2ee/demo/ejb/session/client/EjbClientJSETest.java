@@ -26,15 +26,6 @@ import corso.ejb.demo.servizi.basic.io.model.User;
 @Slf4j
 public class EjbClientJSETest {
 
-	/**
-	 * @param args
-	 */
-//	private static final String JBOSS_71_HELLOSERVICE="JEE-100-EJB-Session/HelloServiceImpl!corso.ejb.demo.servizi.basic.io.HelloServiceRemote";
-//	private static final String JBOSS_71_USERSERVICE="JEE-100-EJB-Session/UserServiceImpl!corso.ejb.demo.servizi.basic.io.UserServiceRemote";
-
-	
-	
-	
 	
 	public static void main(String[] args) {
 
@@ -56,9 +47,9 @@ public class EjbClientJSETest {
 	
 	private static void testHelloService(Context initCtx) throws NamingException{
 		Object service = initCtx.lookup(JBossUtils.JBOSS_71_HELLOSERVICE);
-		//log.info("Oggetto recuperato:\n");
+		log.info("Oggetto recuperato:\n");
 		HelloService helloService=(HelloService)service;			
-		//log.info(helloService.hello("Stefano"));
+		log.info(helloService.hello("Stefano"));
 	}
 	
 	private static void testUserService(Context initCtx) throws NamingException, ServiceException{

@@ -1,0 +1,37 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+ 
+  <parent>
+    <groupId>corso.spring.see</groupId>
+    <artifactId>SJMS</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+  </parent>
+  
+  <artifactId>SJMS-100-ClientJSE</artifactId>
+  <name>SJMS-100-ClientJSE</name>
+  <description>demo JMS JSE</description>
+  
+  <dependencies>
+  
+	    <dependency>
+		      <groupId>org.apache.geronimo.specs</groupId>
+		      <artifactId>geronimo-jms_1.1_spec</artifactId>
+		      <version>${amq.geronimo.version}</version> 
+		</dependency>
+    
+		<dependency>
+		      <groupId>org.apache.qpid</groupId>
+		      <artifactId>qpid-jms-client</artifactId>
+		  <version>${amq.qpid.version}</version> 
+	   	 </dependency>
+	   	 
+	  	<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>${version.lombok}</version>
+		</dependency>
+	   		 
+  </dependencies>
+  
+  
+</project>
