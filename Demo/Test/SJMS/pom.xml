@@ -143,7 +143,6 @@
   <modules>
   	<module>SJMS-100-ClientJSE</module> 
   	<module>SJMS-200-ClientSpring</module>
-  	<module>SJMS-230-SpringJms</module>
-  	<module>SJMS-270-SpringConfig</module>
+  	<module>SJMS-230-SpringJms</module> 
   </modules>
 </project>
