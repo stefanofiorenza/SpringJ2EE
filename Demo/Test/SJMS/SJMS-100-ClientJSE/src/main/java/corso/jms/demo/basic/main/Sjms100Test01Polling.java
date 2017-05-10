@@ -6,14 +6,17 @@ import java.util.concurrent.Executors;
 
 import javax.jms.JMSException;
 
+import lombok.extern.slf4j.Slf4j;
 import corso.jms.demo.basic.common.JmsConsumer;
 import corso.jms.demo.basic.common.JmsProducer;
 import corso.jms.demo.basic.config.Configs;
 import corso.jms.demo.basic.config.JndiUtils;
 
+@Slf4j
 public class Sjms100Test01Polling {
 
 	private static ExecutorService executor = Executors.newFixedThreadPool(10);
+	
 		
 	public static void main(String[] args) throws IOException {
 				
@@ -31,7 +34,7 @@ public class Sjms100Test01Polling {
 		producer.startConnection();
 		//producer.sendTextMessage("test");	
 		
-		producer.sendManyTextMessage(20, 0);
+		producer.sendManyTextMessage(20, 0,5);
 		producer.closeCommunication();
 	}
 	
@@ -56,7 +59,11 @@ public class Sjms100Test01Polling {
 		executor.submit(new Runnable() {				
 			@Override
 			public void run() {
-				consumerActions(consumer);				
+				try{
+					consumerActions(consumer);	
+				}catch (Exception e){
+					log.error(e.getMessage(),e);
+				}								
 			}
 		});		
 	}
@@ -66,7 +73,12 @@ public class Sjms100Test01Polling {
 		executor.submit(new Runnable() {			
 			@Override
 			public void run() {
-				producerActions(producer);				
+				try{
+					producerActions(producer);	
+				}catch (Exception e){
+					log.error(e.getMessage(),e);
+				}
+							
 			}			
 		});				
 	}

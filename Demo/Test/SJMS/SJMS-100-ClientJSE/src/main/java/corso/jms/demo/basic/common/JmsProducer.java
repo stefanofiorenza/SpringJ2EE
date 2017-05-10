@@ -10,9 +10,15 @@ import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageProducer;
 import javax.jms.ObjectMessage;
+import javax.jms.Queue;
+import javax.jms.QueueSession;
+import javax.jms.Session;
 import javax.jms.TextMessage;
+import javax.jms.Topic;
+import javax.jms.TopicSession;
 
 import lombok.extern.slf4j.Slf4j;
+import corso.jms.demo.basic.config.Configs;
 import corso.jms.demo.basic.config.DestinationType;
 
 
@@ -22,9 +28,9 @@ public class JmsProducer extends JmsClient{
 	private MessageProducer producer;
 	
 	
-	public JmsProducer(ConnectionFactory connectionFactory, Destination destination, String user, String pw, 
-			 boolean sessionTransactional, int ackMode){		
-		super(connectionFactory,  destination,user, pw, sessionTransactional,  ackMode);
+	public JmsProducer(ConnectionFactory connectionFactory, Destination destination,String destinationType, 
+			String user, String pw, boolean sessionTransactional, int ackMode){		
+		super(connectionFactory, destination,destinationType, user, pw, sessionTransactional,  ackMode);
 		createProducerInternal();			
 	}
 	
@@ -35,9 +41,17 @@ public class JmsProducer extends JmsClient{
 //	}
 	
 	private void createProducerInternal(){
-		try{			
-			//Creo un producer collegato alla Destination sul Message Broker			
-			producer = session.createProducer(destination);			
+		try{		
+			
+			switch (destinationType) {
+			case Configs.QUEUE_TYPE:
+				producer = ((QueueSession) session).createProducer((Queue) destination);
+				break;
+				
+			case Configs.TOPIC_TYPE:
+				producer = ((TopicSession) session).createPublisher((Topic) destination);
+				break;
+			}					
 		}		
 		catch (JMSException e) {
 			e.printStackTrace();
@@ -49,14 +63,16 @@ public class JmsProducer extends JmsClient{
 			int sent=0;
 			
 			for (int i=0; i<howMany; i++){
+				
 				if(howOftenIllegalMsg>0 && i%howOftenIllegalMsg==0){
 					sendTextMessage("");
 				}else{
 					sendTextMessage("Message#"+i);
 				}	
-				sent++;
+				sent++;				
 				
-				if(session.getTransacted() && commitInterval>0 && sent==commitInterval){
+				if(session.getTransacted() && commitInterval>0 && sent%commitInterval==0){
+					//ConsumerUtils.testTransazioneInRollback(session);
 					session.commit();
 				}
 			}
@@ -118,11 +134,13 @@ public class JmsProducer extends JmsClient{
 	private void sendMessageAndLog(Message message) throws JMSException{
 		//Spedisco
 		log.info("Sending msg with content: [ {} ] ...",message);
-		producer.send(message);
+		producer.send(message);		
 		log.info("Message with content: [ {} ] Sent",message);
 	}
 
 	private String asJsonObject(String data){
 		return "{data: \""+data+"\"}";
 	}
+	
+
 }

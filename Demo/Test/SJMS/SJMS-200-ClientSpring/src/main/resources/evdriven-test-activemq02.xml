@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:jms="http://www.springframework.org/schema/jms"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/jms
+        http://www.springframework.org/schema/jms/spring-jms.xsd">
+
+		<import resource="common-cfg-activemq.xml"/>	
+
+		<!--  POJO (no dependencies on Spring) Delegate for processing Message -->
+		<bean id="messageDelegate" class="corso.sjms.demo.adapters.JmsMessageAdapterDelegate">
+		  	<property name="nome" value="EDCfromXmlNS"/>
+		   	<property name="ackMode" value="1"/>
+		</bean>
+		
+		<!--  Jms Listener Adapter (Wrapper intorno al Pojo Processor) -->
+		<bean id="messageListenerAdapter" class="org.springframework.jms.listener.adapter.MessageListenerAdapter">
+		    <constructor-arg ref="messageDelegate" />
+		    <property name="defaultListenerMethod" value="receiveMessage"/>
+		    <!-- we don't want automatic message context extraction -->
+		    <property name="messageConverter">
+		        <null/>
+		    </property>		     
+		</bean>
+		
+			<!-- DMLC  Default Message listener container... -->
+		<bean id="jmsContainer" class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+		    <property name="connectionFactory" ref="connectionFactory"/>
+		    <property name="destination" ref="jmsQueueDestination"/>
+		    <property name="messageListener" ref="messageListenerAdapter" />
+		</bean>
+		
+				
+		
+		
+		
+	
+	
+</beans>

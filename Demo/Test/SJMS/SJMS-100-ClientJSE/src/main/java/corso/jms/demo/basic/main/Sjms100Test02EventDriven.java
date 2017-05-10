@@ -7,7 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import corso.jms.demo.basic.common.JmsConsumer;
 import corso.jms.demo.basic.common.JmsProducer;
 import corso.jms.demo.basic.config.JndiUtils;
-import corso.jms.demo.basic.consumer.listener.TextMessageListener;
+import corso.jms.demo.basic.listeners.TextMessageListener;
 
 @Slf4j
 public class Sjms100Test02EventDriven {
@@ -19,12 +19,11 @@ public class Sjms100Test02EventDriven {
 		
 		JmsProducer producer=JndiUtils.loadJmsProducer();
 		producerThread(producer);
+		consumerThread("ED-ConsumerName1", 30000L);
+	
+		//startConsumer("ED-ConsumerName2", 30000L);
 		
-		startConsumer("ED-ConsumerName1","QueueConsumerListener1", 30000L);
-		//startConsumer("ED-ConsumerName2","QueueConsumerListener2", 30000L);
-		
-		//startConsumer("ED-ConsumerName1","TopicConsumerListener1", 30000L);
-		//startConsumer("ED-ConsumerName2","TopicConsumerListener2", 30000L);
+	
 	
     }
 	
@@ -32,7 +31,7 @@ public class Sjms100Test02EventDriven {
 		producer.startConnection();
 		//producer.sendTextMessage("test");	
 		
-		producer.sendManyTextMessage(20, 19);
+		producer.sendManyTextMessage(20, 5);
 		producer.closeCommunication();
 	}
 	
@@ -41,17 +40,35 @@ public class Sjms100Test02EventDriven {
 		executor.submit(new Runnable() {			
 			@Override
 			public void run() {
-				producerActions(producer);				
-			}			
+				try{
+					producerActions(producer);		
+				}catch (Exception e){
+					log.error(e.getMessage(),e);
+				}		
+			}				
 		});				
 	}
-
 	
-	private static void startConsumer(String consumerName, String messageListenerName,long timeBeforeDisconnect){
+
+	private static void consumerThread(String consumerName, long timeBeforeDisconnect){
+		
+		executor.submit(new Runnable() {				
+			@Override
+			public void run() {
+				try{					
+					consumerActions(consumerName, timeBeforeDisconnect);	
+				}catch (Exception e){
+					log.error(e.getMessage(),e);
+				}								
+			}
+		});		
+	}
+	
+	private static void consumerActions(String consumerName, long timeBeforeDisconnect){
 		try {
 			
 			JmsConsumer consumer =JndiUtils.loadJmsConsumer(consumerName);
-			consumer.setTextMessageListener(new TextMessageListener(messageListenerName));
+			consumer.setTextMessageListener(new TextMessageListener());
 			consumer.startConnection();
 					
 			// Rimane in attesa per 30 secondi...

@@ -6,14 +6,21 @@ import javax.jms.Destination;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageConsumer;
+import javax.jms.Queue;
+import javax.jms.QueueConnectionFactory;
+import javax.jms.QueueSession;
 import javax.jms.Session;
 import javax.jms.TextMessage;
+import javax.jms.Topic;
+import javax.jms.TopicConnectionFactory;
+import javax.jms.TopicSession;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import corso.jms.demo.basic.config.Configs;
-import corso.jms.demo.basic.consumer.listener.TextMessageListener;
+import corso.jms.demo.basic.config.DestinationType;
+import corso.jms.demo.basic.listeners.TextMessageListener;
 
 
 @Slf4j
@@ -26,26 +33,27 @@ public class JmsConsumer extends JmsClient{
 	@Setter
 	private String name;
 	
-	public JmsConsumer(String name, ConnectionFactory connectionFactory, Destination destination, String user, String pw, 
-		 boolean sessionTransactional, int ackMode){
+	public JmsConsumer(String name, ConnectionFactory connectionFactory, Destination destination,String destinationType, 
+			String user, String pw,  boolean sessionTransactional, int ackMode){
 		
-		super(connectionFactory,  destination,user, pw, sessionTransactional,  ackMode);
+		super(connectionFactory, destination,destinationType, user, pw, sessionTransactional,  ackMode);
 		this.setName(name);
 		createConsumerInternal();
 	}
-	
-//	public JmsConsumer(ConnectionFactory connectionFactory, String destinationName, String user, String pw, 
-//			 boolean sessionTransactional, int ackMode, DestinationType destType){
-//		
-//			super(connectionFactory, destinationName,user, pw, sessionTransactional,  ackMode,destType);
-//			createConsumerInternal();
-//	}
-	
+
 	
 	private void createConsumerInternal(){
-		try{				
-			//Creo un consumer collegato alla Destination sul Message Broker			
-			consumer = session.createConsumer(destination);			
+		try{		
+			
+			switch (destinationType) {
+			case Configs.QUEUE_TYPE:
+				consumer = ((QueueSession) session).createReceiver((Queue) destination);
+				break;
+				
+			case Configs.TOPIC_TYPE:
+				consumer = ((TopicSession) session).createSubscriber((Topic) destination);
+				break;
+			}				
 		}		
 		catch (JMSException e) {
 			e.printStackTrace();
@@ -56,7 +64,11 @@ public class JmsConsumer extends JmsClient{
 	
 	public void setTextMessageListener(TextMessageListener listener){	
 		try {
+			
+			listener.setNome(this.name);
+			listener.setAckMode(this.ackMode);			
 			consumer.setMessageListener(listener);	
+			
 		} catch (JMSException e) {			
 			e.printStackTrace();			
 		} 
@@ -78,8 +90,9 @@ public class JmsConsumer extends JmsClient{
 			
 			msgContent=pollingForOneTextMessage();
 						
-			if(session.getTransacted() && commitInterval>0 && 
+			if(this.transacted && commitInterval>0 && 
 					consumed!=0 && consumed%commitInterval==0){
+				//ConsumerUtils.testTransazioneInRollback(session);
 				session.commit();				
 			}
 			consumed++;			
@@ -104,9 +117,12 @@ public class JmsConsumer extends JmsClient{
 	private String processMessage(Message message) throws JMSException{
 		String msgContent="";
 		
-		//ConsumerUtils.validateMessage(message);
+		JmsDemoUtils.validateMessage(message);
+		JmsDemoUtils.logHeaders(message, this.getClass());
 		
-		if(this.ackMode== Session.CLIENT_ACKNOWLEDGE){
+		
+		//se non e' transazionale e ack manuale si da l'ack ad ogni messaggio processato correttamente
+		if(this.ackMode== Session.CLIENT_ACKNOWLEDGE && !this.transacted){ 
 			message.acknowledge();
 		}
 		

@@ -6,6 +6,8 @@ import javax.jms.Destination;
 import javax.jms.JMSException;
 import javax.jms.Session;
 
+import lombok.Getter;
+import lombok.Setter;
 import corso.jms.demo.basic.config.DestinationType;
 
 public class JmsClient {
@@ -14,11 +16,17 @@ public class JmsClient {
 	protected Session session;	
 	protected Destination destination;
 	
+	@Getter
 	protected int ackMode;
 	protected boolean transacted;
 	
-	public JmsClient(ConnectionFactory connectionFactory, Destination destination,String user, String pw, 
-			boolean sessionTransactional, int ackMode){
+	@Getter
+	@Setter
+	protected String destinationType;
+	
+	
+	public JmsClient(ConnectionFactory connectionFactory, Destination destination,String destinationType,
+			String user, String pw, boolean sessionTransactional, int ackMode){
 		try{
 								
 			//Apro una connessione Jms ottenendola dal Pool (Factory)
@@ -33,6 +41,7 @@ public class JmsClient {
 			//utili per demo
 			this.ackMode=ackMode;
 			this.transacted=sessionTransactional;
+			this.setDestinationType(destinationType);
 		}		
 		catch (JMSException e) {
 			e.printStackTrace();

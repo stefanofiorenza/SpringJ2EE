@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:jms="http://www.springframework.org/schema/jms"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/jms
+        http://www.springframework.org/schema/jms/spring-jms.xsd">
+
+		<import resource="common-cfg-activemq.xml"/>	
+
+		<!-- 01 Message Driven POJO (MDP) -->		
+		<bean id="messageListener" class="corso.sjms.demo.listeners.TextMessageListener">
+		   <property name="nome" value="EDCfromXml"/>
+		   <property name="ackMode" value="1"/>
+		</bean>	
+	
+		<!-- NS version of DMLC -->								
+		<jms:listener-container 
+			container-type="default" 
+			connection-factory="connectionFactory" 		
+			acknowledge="auto">			
+			<jms:listener destination="see.jms.test.queue" ref="messageListener" />			
+		</jms:listener-container>
+		
+		
+		
+	
+	
+</beans>
