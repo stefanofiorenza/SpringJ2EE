@@ -5,14 +5,15 @@
     <artifactId>SJMS</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
-  <artifactId>SJMS-LAB-StocksExchange</artifactId>
-  <name>SJMS-LAB-StocksExchange</name>
-  <description>demo Stock Exchange System</description>
-  <dependencies>
+  <artifactId>SJMS-LAB-StockExchangeSolution</artifactId>
+  
+    <dependencies>
   	<dependency>
   		<groupId>apps.stockexchange.service</groupId>
   		<artifactId>StockExchangeService</artifactId>
   		<version>0.0.1-SNAPSHOT</version>
   	</dependency>
   </dependencies>
+  
+    <name>SJMS-LAB-StockExchangeSolution</name>
 </project>

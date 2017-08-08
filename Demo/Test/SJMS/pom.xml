@@ -144,5 +144,6 @@
   	<module>SJMS-100-ClientJSE</module> 
   	<module>SJMS-200-ClientSpring</module>
   	<module>SJMS-LAB-StocksExchange</module>
+  	<module>SJMS-LAb-StockExchangeSolution</module>
   </modules>
 </project>
