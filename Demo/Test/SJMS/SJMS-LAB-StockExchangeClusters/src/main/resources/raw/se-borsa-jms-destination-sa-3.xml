@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:jms="http://www.springframework.org/schema/jms"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+        http://www.springframework.org/schema/jms
+        http://www.springframework.org/schema/jms/spring-jms-2.5.xsd">
+
+	
+	
+	<!-- DESTINATION CONFIGS: -->	
+	<bean id="jndi-destinations-customer1" class="org.springframework.jndi.JndiTemplate">
+		<property name="environment">
+			<props>
+				<prop key="java.naming.factory.initial">org.apache.activemq.jndi.ActiveMQInitialContextFactory</prop>
+				<prop key="java.naming.provider.url">tcp://localhost:61616</prop>
+								
+				<prop key="queue.testQueue">see.jms.test.queue</prop>
+				<prop key="topic.testTopic">see.jms.test.topic</prop>	
+				<prop key="queue.dlq">see.jms.test.dlq</prop>			
+			</props>
+		</property>
+	</bean>
+	
+	<bean id="jms-queue-order-customer1" class="org.springframework.jndi.JndiObjectFactoryBean">
+		<property name="jndiName" value="testQueue" />
+		<property name="jndiTemplate" ref="jndiTemplate"/>
+	</bean>
+	
+	<bean id="jms-queue-order-reply-customer1" class="org.springframework.jndi.JndiObjectFactoryBean">
+		<property name="jndiName" value="testQueue" />
+		<property name="jndiTemplate" ref="jndiTemplate"/>
+	</bean>
+	
+	<bean id="jms-queue-order-dlq-customer1" class="org.springframework.jndi.JndiObjectFactoryBean">
+		<property name="jndiName" value="testQueue" />
+		<property name="jndiTemplate" ref="jndiTemplate"/>
+	</bean>
+	
+	
+	<bean id="jms-topic-stocks-events-customer1" class="org.springframework.jndi.JndiObjectFactoryBean">
+		<property name="jndiName" value="testQueue" />
+		<property name="jndiTemplate" ref="jndiTemplate"/>
+	</bean>
+	
+	
+	<!-- PRODUCER CONFIG -->
+	
+	<bean id="jms-template-to-reply-customer1" class="org.springframework.jms.core.JmsTemplate"> 
+		<property name="connectionFactory" ref="jmsConnFactoryServer1" />
+		<property name="defaultDestination" ref="jms-queue-order-reply-customer1" />
+	</bean>
+	
+<!-- 	<bean id="queueProducer" class="corso.sjms.demo.clients.JmsProducerSpringImpl"> 
+		<property name="name" value="Producer" /> 
+		<property name="ackMode" value="1" /> 
+		<property name="transacted" value="false" /> 
+		<property name="destination" ref="jmsQueueDestination" /> 
+		<property name="jmsTemplate" ref="jmsQueueTemplate" />
+	</bean> -->
+
+		
+</beans>
