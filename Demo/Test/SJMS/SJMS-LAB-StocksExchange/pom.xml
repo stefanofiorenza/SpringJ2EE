@@ -5,8 +5,8 @@
     <artifactId>SJMS</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
-  <artifactId>SJMS-LAB-StocksExchange</artifactId>
-  <name>SJMS-LAB-StocksExchange</name>
+  <artifactId>SJMS-LAB-StocksExchangeCommons</artifactId>
+  <name>SJMS-LAB-StocksExchangeCommons</name>
   <description>demo Stock Exchange System</description>
   <dependencies>
   	<dependency>

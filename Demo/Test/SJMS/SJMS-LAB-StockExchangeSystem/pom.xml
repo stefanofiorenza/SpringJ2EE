@@ -8,13 +8,13 @@
   <artifactId>SJMS-LAB-StockExchangeSystem</artifactId>
   <name>SJMS-LAB-StockExchangeSystem</name>
   
-     <dependencies>
+  
+  
+  <dependencies>
   	<dependency>
-  		<groupId>apps.stockexchange.service</groupId>
-  		<artifactId>StockExchangeService</artifactId>
+  		<groupId>corso.spring.see</groupId>
+  		<artifactId>SJMS-LAB-StocksExchangeCommons</artifactId>
   		<version>0.0.1-SNAPSHOT</version>
   	</dependency>
   </dependencies>
-  
-  
 </project>
