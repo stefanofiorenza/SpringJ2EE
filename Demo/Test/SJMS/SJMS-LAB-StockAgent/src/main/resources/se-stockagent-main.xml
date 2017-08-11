@@ -12,58 +12,59 @@
 
 	
 	<context:component-scan base-package="apps.stockexchange.stockagent.services" />	
-	
-	<bean id="jndiTemplate" class="org.springframework.jndi.JndiTemplate">
-		<property name="environment">
-			<props>
-				<prop key="java.naming.factory.initial">org.apache.activemq.jndi.ActiveMQInitialContextFactory</prop>
-				<prop key="java.naming.provider.url">tcp://localhost:61616</prop>
-				<prop key="connectionFactoryNames">connectionFactory</prop>
-				<prop key="queue.orderQueue">se.jms.queues.order</prop>
-				<prop key="queue.orderReplyQueue">se.jms.queues.orderReply</prop>	
-				<prop key="topic.stockevents">se.jms.topic.stockevents</prop>				
-			</props>
-		</property>
+		
+	<!-- A connection to ActiveMQ --> 
+	<bean id="amqConnectionFactory" 
+    	class="org.apache.activemq.ActiveMQConnectionFactory">    	
+    	  <property name="brokerURL" value="tcp://localhost:61616" />     	
+    </bean>
+
+	<!-- A cached connection to wrap the ActiveMQ connection --> 
+	<bean id="cachedConnectionFactory" class="org.springframework.jms.connection.CachingConnectionFactory">
+	 	<constructor-arg ref="amqConnectionFactory" />	  
+	  	<property name="sessionCacheSize" value="10" />   
 	</bean>
 	
 	
+	<!-- a pooling based JMS provider ActiveMQConnectionFactory -->
+	<!--   <bean id="jmsFactory" class="org.apache.activemq.pool.PooledConnectionFactory" destroy-method="stop">
+	    <property name="connectionFactory">
+	      <bean class="org.apache.activemq.ActiveMQConnectionFactory">
+	        <property name="brokerURL">
+	          <value>tcp://localhost:61616</value>
+	        </property>
+	      </bean>
+	    </property>
+	  </bean> -->
 	
-		<!--  JMS -->
 	
-		<bean id="jmsConnectionFactory" class="org.springframework.jndi.JndiObjectFactoryBean">
-			<property name="jndiName" value="connectionFactory" />
-			<property name="jndiTemplate" ref="jndiTemplate"/>
-		</bean>
+	<!-- Queues -->
+	<bean id="orderQueue" class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg value="se.jms.queues.order" />
+	</bean>
 
-		<bean id="jmsQueueOrder" class="org.springframework.jndi.JndiObjectFactoryBean">
-				<property name="jndiName" value="orderQueue" />
-				<property name="jndiTemplate" ref="jndiTemplate"/>
-		</bean> 
-		
-		
-		<bean id="jmsQueueOrderReply" class="org.springframework.jndi.JndiObjectFactoryBean">
-			<property name="jndiName" value="orderReplyQueue" />
-			<property name="jndiTemplate" ref="jndiTemplate"/>
-		</bean>
-		
-		
-		<!-- PRODUCER -->
-			<bean id="jmsTemplateStockProducer" class="org.springframework.jms.core.JmsTemplate"> 
-				<property name="connectionFactory" ref="jmsConnectionFactory" />
-				<property name="defaultDestination" ref="jmsQueueOrder" />
-			</bean>
-	
+<!-- 	<bean id="orderReplyQueue" class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg value="se.jms.queues.orderReplyQueue" />
+	</bean> -->
+
+
+	<!-- PRODUCERS -->
+	<bean id="jmsTemplateStockProducer" class="org.springframework.jms.core.JmsTemplate">
+		<property name="connectionFactory" ref="cachedConnectionFactory" />
+		<property name="defaultDestination" ref="orderQueue" />
+	</bean>	
+
 				
-		<!-- CONSUMER EVENT DRIVEN-->
-			<bean id="stockAgentReplyListener" class="apps.stockexchange.stockagent.jms.StockAgentOrderOutcomeConsumer" /> 
-					
-			<jms:listener-container 
-				destination-type="queue"		
-				container-type="default" 
-				connection-factory="jmsConnectionFactory" 		
-				acknowledge="auto">			
-				<jms:listener destination="se.jms.queues.orderReplyQueue" ref="stockAgentReplyListener" />			
-			</jms:listener-container>
+	<!-- CONSUMER EVENT DRIVEN-->
+	<bean id="stockAgentReplyListener" class="apps.stockexchange.stockagent.jms.StockAgentOrderOutcomeConsumer" /> 
+			
+	<jms:listener-container 
+		destination-type="queue"		
+		container-type="default" 
+		connection-factory="cachedConnectionFactory" 		
+		acknowledge="auto">			
+		<jms:listener destination="se.jms.queues.orderReplyQueue" ref="stockAgentReplyListener" />			
+	</jms:listener-container>
 		
 		
 		

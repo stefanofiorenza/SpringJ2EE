@@ -30,11 +30,18 @@
 	</bean>
 	
 	
-		<!--  JMS -->
-		<bean id="jmsConnectionFactory" class="org.springframework.jndi.JndiObjectFactoryBean">
+		<!--  JMS -->		
+		<bean id="jmsConnectionFactoryNoPool" class="org.springframework.jndi.JndiObjectFactoryBean">
 			<property name="jndiName" value="connectionFactory" />
 			<property name="jndiTemplate" ref="jndiTemplate"/>
 		</bean>
+		
+		<!-- A cached connection to wrap the ActiveMQ connection --> 
+		<bean id="jmsPooledConnectionFactory" class="org.springframework.jms.connection.CachingConnectionFactory">
+		 	<constructor-arg ref="jmsConnectionFactoryNoPool" />	  
+		  	<property name="sessionCacheSize" value="10" />   
+		</bean>
+	
 	
 		<!-- PRODUCER JMS ORDER REPLIES-->
 		<bean id="jmsQueueOrderReply" class="org.springframework.jndi.JndiObjectFactoryBean">
@@ -43,7 +50,7 @@
 		</bean>
 		
 		<bean id="jmsTemplateBorsaReplySender" class="org.springframework.jms.core.JmsTemplate"> 
-			<property name="connectionFactory" ref="jmsConnectionFactory" />
+			<property name="connectionFactory" ref="jmsPooledConnectionFactory" />
 			<property name="defaultDestination" ref="jmsQueueOrderReply" />
 		</bean>
 	
@@ -54,7 +61,7 @@
 		<jms:listener-container 
 			destination-type="queue"		
 			container-type="default" 
-			connection-factory="jmsConnectionFactory" 		
+			connection-factory="jmsPooledConnectionFactory" 		
 			acknowledge="auto">			
 			<jms:listener destination="se.jms.queues.order" ref="borsaOrderListener" />			
 		</jms:listener-container>
