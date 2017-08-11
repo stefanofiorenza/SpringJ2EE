@@ -27,8 +27,7 @@ public class StockAgentMain {
 	public static void main(String[] args) {
 
 		ApplicationContext context =new ClassPathXmlApplicationContext("se-stockagent-main.xml");
-		sendOrdersThread(context);
-		
+		sendOrdersThread(context);		
 	}
 	
 	
@@ -69,7 +68,7 @@ public class StockAgentMain {
 	private static void sendingActions(ApplicationContext context){		
 	
 		StockAgentOrderProducer stockProducer=context.getBean(StockAgentOrderProducer.class);
-		Destination orderDestination=context.getBean("jmsQueueOrder",Destination.class);
+		Destination orderDestination=context.getBean("orderQueue",Destination.class);
 		
 		List<Order> orders= StockOrderGenerator.generateOrders(ORDERS);
 		
