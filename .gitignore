@@ -8,3 +8,8 @@ Temp/*
 **/bin/**
 **/build/**
 Docs/SJMS/Risorse/GitIGnore/**
+Docs/SJMS/~*.docx
+**/~*.docx
+*/**.tmp
+/**.tmp
+*.tmp

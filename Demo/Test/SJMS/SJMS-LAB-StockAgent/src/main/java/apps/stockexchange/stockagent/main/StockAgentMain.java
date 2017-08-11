@@ -20,6 +20,7 @@ public class StockAgentMain {
 
 	
 	private static ExecutorService executor = Executors.newFixedThreadPool(3);
+	private static ExecutorService producerExecutor = Executors.newFixedThreadPool(3);
 	
 	private static int ORDERS=1000;
 	
@@ -74,9 +75,23 @@ public class StockAgentMain {
 		
 		orders.forEach(order -> {
 			log.info("Sending Order: {} to {} ",order.toString(),orderDestination.toString());
-			stockProducer.sendOrder(order);
+			sendMessageInNewThread(stockProducer,order);			
 		});		
 	}
 	
 
+	private static void sendMessageInNewThread(StockAgentOrderProducer stockProducer,Order order){
+		
+		producerExecutor.submit(new Runnable() {
+			
+			@Override
+			public void run() {
+				try{
+					stockProducer.sendOrder(order);			
+				}catch (Exception e){
+					log.error(e.getMessage(),e);
+				}		
+			}				
+		});		
+	}
 }
