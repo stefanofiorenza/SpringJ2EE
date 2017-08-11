@@ -27,6 +27,7 @@
 	</bean>
 	
 	
+	
 		<!--  JMS -->
 	
 		<bean id="jmsConnectionFactory" class="org.springframework.jndi.JndiObjectFactoryBean">
