@@ -20,6 +20,7 @@ import apps.stockexchange.beans.Order;
 import apps.stockexchange.beans.OrderOutcome;
 import apps.stockexchange.borsa.exceptions.OrderFormatException;
 import apps.stockexchange.borsa.exceptions.OrderServiceException;
+import apps.stockexchange.borsa.services.MessageRouter;
 import apps.stockexchange.service.OrderService;
 import apps.stockexchange.service.OrderUtils;
 
@@ -29,6 +30,9 @@ public class OrderMessageConsumer implements MessageListener{
 	
 	@Autowired
 	private OrderService orderService;
+	
+	@Autowired
+	private MessageRouter messageRouter;
 	
 	@Autowired
 	@Qualifier("jmsTemplateBorsaReplySender")
@@ -74,7 +78,10 @@ public class OrderMessageConsumer implements MessageListener{
 	
 	private boolean sendToReplyQueue(OrderOutcome outcome) {
 		
-		jmsReplySender.send(new MessageCreator() {
+		
+		String destination =messageRouter.routeOrder(outcome);
+		
+		jmsReplySender.send(destination,new MessageCreator() {
 			
 			@Override
 			public Message createMessage(Session session) throws JMSException {
