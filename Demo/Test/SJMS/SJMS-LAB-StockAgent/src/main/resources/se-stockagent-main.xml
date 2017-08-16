@@ -48,6 +48,8 @@
 	</bean> -->
 
 
+
+
 	<!-- PRODUCERS -->
 	<bean id="jmsTemplateStockProducer" class="org.springframework.jms.core.JmsTemplate">
 		<property name="connectionFactory" ref="cachedConnectionFactory" />

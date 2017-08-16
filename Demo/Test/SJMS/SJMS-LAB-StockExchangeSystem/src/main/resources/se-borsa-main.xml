@@ -15,7 +15,23 @@
 	
 	<context:component-scan base-package="apps.stockexchange.borsa.services" />	
 	
+	<bean id="stockAgentId2DestinationMap" class="java.util.HashMap">
+	    <constructor-arg>
+	        <map key-type="java.lang.String" value-type="java.lang.String">
+	            <entry key="stockAgentId-1" value="ADVISERS-LLP-ReplyQueue" />
+	            <entry key="stockAgentId-2" value="ASSET-MANAGEMENT-LIMITED-ReplyQueue" />
+	            <entry key="stockAgentId-3" value="EUROPEAN-CAPITAL-MARKETS-LIMITED-ReplyQueue" />
+	            <entry key="stockAgentId-4" value="EUROPEAN-FUND-SERVICES-ReplyQueue" />
+	            <entry key="stockAgentId-5" value="CREDEM-ReplyQueue" />
+	            <entry key="stockAgentId-6" value="UNICREDIT-ReplyQueue" />  
+	            <entry key="stockAgentId-7" value="BANCA-INTESA-ReplyQueue" />
+	            <entry key="stockAgentId-8" value="PRAEFINIUM-PARTNERS-ReplyQueue" />
+	            <entry key="stockAgentId-9" value="PREDICTED-MARKETS-ReplyQueue" />
+	        </map>
+   	 	</constructor-arg>
+	</bean>
 	
+		
 	<bean id="jndiTemplate" class="org.springframework.jndi.JndiTemplate">
 		<property name="environment">
 			<props>
@@ -30,7 +46,7 @@
 	</bean>
 	
 	
-		<!--  JMS -->		
+		<!--  JMS Connection Factory-->		
 		<bean id="jmsConnectionFactoryNoPool" class="org.springframework.jndi.JndiObjectFactoryBean">
 			<property name="jndiName" value="connectionFactory" />
 			<property name="jndiTemplate" ref="jndiTemplate"/>
@@ -43,6 +59,13 @@
 		</bean>
 	
 	
+		<!-- A dynamic resolver --> 
+		<bean id="jmsDestResolver" class=" org.springframework.jms.support.destination.DynamicDestinationResolver"/>
+
+		<!-- A JNDI resolver -->  
+	<!-- 	<bean id="jmsDestResolver" class=" org.springframework.jms.support.destination.JndiDestinationResolver"/> -->
+	
+	
 		<!-- PRODUCER JMS ORDER REPLIES-->
 		<bean id="jmsQueueOrderReply" class="org.springframework.jndi.JndiObjectFactoryBean">
 			<property name="jndiName" value="orderReplyQueue" />
@@ -50,8 +73,10 @@
 		</bean>
 		
 		<bean id="jmsTemplateBorsaReplySender" class="org.springframework.jms.core.JmsTemplate"> 
-			<property name="connectionFactory" ref="jmsPooledConnectionFactory" />
-			<property name="defaultDestination" ref="jmsQueueOrderReply" />
+			<property name="connectionFactory" ref="jmsPooledConnectionFactory" />		
+			<property name="destinationResolver">
+    			<ref bean="jmsDestResolver"/>
+  			</property>
 		</bean>
 	
 	

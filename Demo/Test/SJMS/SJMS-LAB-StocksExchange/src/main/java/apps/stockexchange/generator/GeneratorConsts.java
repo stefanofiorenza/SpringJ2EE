@@ -375,14 +375,14 @@ public class GeneratorConsts {
 	
 	
 	public static final StockAgent[] STOCK_AGENTS= {
-		new StockAgent("AA ADVISERS LLP","customer1"),
-		new StockAgent("A J ASSET MANAGEMENT LIMITED","customer2"),
-		new StockAgent("EUROPEAN CAPITAL MARKETS LIMITED","customer3"),
-		new StockAgent("EUROPEAN FUND SERVICES S.A.","customer4"),
-		new StockAgent("CREDEM","customer5"),
-		new StockAgent("UNICREDIT","customer6"),
-		new StockAgent("BANCA INTESA","customer7"),
-		new StockAgent("PRAEFINIUM PARTNERS LTD","customer8"),
-		new StockAgent("PREDICTED MARKETS LTD","customer9")
+		new StockAgent("stockAgentId-1","AA ADVISERS LLP"),
+		new StockAgent("stockAgentId-2","A J ASSET MANAGEMENT LIMITED"),
+		new StockAgent("stockAgentId-3","EUROPEAN CAPITAL MARKETS LIMITED"),
+		new StockAgent("stockAgentId-4","EUROPEAN FUND SERVICES S.A."),
+		new StockAgent("stockAgentId-5","CREDEM"),
+		new StockAgent("stockAgentId-6","UNICREDIT"),
+		new StockAgent("stockAgentId-7","BANCA INTESA"),
+		new StockAgent("stockAgentId-8","PRAEFINIUM PARTNERS LTD"),
+		new StockAgent("stockAgentId-9","PREDICTED MARKETS LTD")
 	};
 }
