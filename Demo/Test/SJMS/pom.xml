@@ -131,22 +131,12 @@
 	    </dependency>
 	 
   </dependencies>
-  
-  <!--
-  <modules>
-  	<module>SEE-100-JMS</module>
-  	<module>SEE-200-AMQP</module> 
-  		
-  </modules>
-  -->
-  
   <modules>
   	<module>SJMS-100-ClientJSE</module> 
-  	<module>SJMS-200-ClientSpring</module>
-  	<module>SJMS-LAB-StocksExchange</module>
-  	<module>SJMS-LAB-StockExchangeSingle</module>
-  	<module>SJMS-LAB-StockExchangeClusters</module>
+  	<module>SJMS-200-ClientSpring</module>  
+  	<module>SJMS-LAB-StocksExchangeCommons</module>  	
   	<module>SJMS-LAB-StockAgent</module>
   	<module>SJMS-LAB-StockExchangeSystem</module>
+  	<module>SJMS-LAB-StockExchangeClusters</module>
   </modules>
 </project>
