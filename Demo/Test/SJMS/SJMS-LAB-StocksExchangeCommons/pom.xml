@@ -5,9 +5,11 @@
     <artifactId>SJMS</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
+  
   <artifactId>SJMS-LAB-StocksExchangeCommons</artifactId>
   <name>SJMS-LAB-StocksExchangeCommons</name>
   <description>demo Stock Exchange System</description>
+  
   <dependencies>
   	<dependency>
   		<groupId>apps.stockexchange.service</groupId>
@@ -15,4 +17,5 @@
   		<version>0.0.1-SNAPSHOT</version>
   	</dependency>
   </dependencies>
+  
 </project>

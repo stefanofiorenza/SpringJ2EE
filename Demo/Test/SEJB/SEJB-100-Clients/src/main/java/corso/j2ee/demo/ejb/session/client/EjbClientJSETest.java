@@ -33,7 +33,7 @@ public class EjbClientJSETest {
 			
 			log.info("Recupero oggetto registrato sul servizio jndi di Jboss...");
 			Context initCtx = new InitialContext();		
-			testHelloService(initCtx);
+			//testHelloService(initCtx);
 			testUserService(initCtx);
 		
 		} catch (NamingException e) {
