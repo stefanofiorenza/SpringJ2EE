@@ -10,12 +10,4 @@
   <name>SJMS-LAB-StocksExchangeCommons</name>
   <description>demo Stock Exchange System</description>
   
-  <dependencies>
-  	<dependency>
-  		<groupId>apps.stockexchange.service</groupId>
-  		<artifactId>StockExchangeService</artifactId>
-  		<version>0.0.1-SNAPSHOT</version>
-  	</dependency>
-  </dependencies>
-  
 </project>
