@@ -93,12 +93,8 @@ public class JndiUtils {
 	}
 	
 	private static Context getInitialContext(Properties properties){
-//		Properties properties = new Properties();
-//		properties.put(Context.INITIAL_CONTEXT_FACTORY,"org.jnp.interfaces.NamingContextFactory");
-//		properties.put(Context.PROVIDER_URL, "jnp://localhost:1099");
 		InitialContext jndiContext = null;
 		try{
-			// Get an initial context
 		   jndiContext = new InitialContext(properties);       		      
 		}catch(NamingException e){
 			System.out.println("Context Error: "+e.getMessage());

@@ -7,14 +7,7 @@
   </parent>
   <artifactId>SJMS-LAB-StockExchangeClusters</artifactId>
   <name>SJMS-LAB-StockExchangeClusters</name>
-  
-   <dependencies>
-  	<dependency>
-  		<groupId>apps.stockexchange.service</groupId>
-  		<artifactId>StockExchangeService</artifactId>
-  		<version>0.0.1-SNAPSHOT</version>
-  	</dependency>
-  </dependencies>
+ 
   
   
 </project>
